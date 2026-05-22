@@ -17,8 +17,8 @@
   <!-- Interactive Photon Particle Canvas -->
   <canvas id="photon-canvas"></canvas>
 
-  <!-- Initial System Boot / Decryption Loader -->
-  <div id="boot-loader">
+  <!-- Initial System Boot / Decryption Loader (opacity:1 from frame 0 — prevents flash) -->
+  <div id="boot-loader" style="opacity:1;">
     <div class="boot-console-box">
       <div id="boot-lines-container">
         <!-- Lines will be dynamically printed by JS -->
@@ -64,8 +64,8 @@
     </div>
   </div>
 
-  <!-- Main Website Root -->
-  <div id="app-root">
+  <!-- Main Website Root — hidden until boot YES is confirmed, prevents any flash -->
+  <div id="app-root" style="visibility: hidden;">
     
     <!-- Top System Header -->
     <header>
