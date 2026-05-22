@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEITOU MIZUKI // DATABASE — OC Directory</title>
+  <meta name="description" content="A responsive, highly interactive Original Character directory website for Seitou Mizuki with a cybercore, glowing high-tech aesthetic.">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- CRT Screen Scanline Overlay -->
+  <div class="scanline-overlay"></div>
+  
+  <!-- Digital grid background overlay -->
+  <div class="grid-bg"></div>
+
+  <!-- Interactive Photon Particle Canvas -->
+  <canvas id="photon-canvas"></canvas>
+
+  <!-- Initial System Boot / Decryption Loader -->
+  <div id="boot-loader">
+    <div class="boot-console-box">
+      <div id="boot-lines-container">
+        <!-- Lines will be dynamically printed by JS -->
+      </div>
+      <div class="boot-btn-wrapper" id="boot-action">
+        <button class="cyber-btn" id="boot-confirm-btn">ENTER SYSTEM</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decryption Subpage Transition Loader -->
+  <div id="decrypt-overlay">
+    <div class="decrypt-box">
+      <div class="decrypt-title">
+        <span>DECRYPTING DATA NODE</span>
+        <span id="decrypt-pct">0%</span>
+      </div>
+      <div class="decrypt-progress-bar">
+        <div class="decrypt-progress-fill" id="decrypt-fill"></div>
+      </div>
+      <div class="decrypt-console" id="decrypt-console-lines">
+        <!-- Dynamic loading logs -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div id="lightbox" class="lightbox-modal">
+    <div class="lightbox-content">
+      <span class="lightbox-close" id="lightbox-close-btn">[CLOSE]</span>
+      <img id="lightbox-img" src="" alt="Enlarged view">
+    </div>
+  </div>
+
+  <!-- Timeline Details Modal Frame -->
+  <div id="timeline-modal" class="lightbox-modal">
+    <div class="cyber-panel lightbox-content" style="max-width: 550px; width: 90%; padding: 2rem;">
+      <span class="lightbox-close" id="timeline-modal-close">[CLOSE]</span>
+      <h3 class="cyber-title" id="timeline-modal-title" style="margin-bottom: 1.25rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; font-family: var(--font-title); font-size: 1.2rem;">[ TIMELINE NODE ]</h3>
+      <div id="timeline-modal-desc" style="font-size: 0.92rem; line-height: 1.6; color: var(--color-text);">
+        <!-- Content dynamically injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Website Root -->
+  <div id="app-root">
+    
+    <!-- Top System Header -->
+    <header>
+      <div class="logo-section">
+        <a href="#/" style="text-decoration: none; color: inherit;">
+          <h1>[ SEITOU MIZUKI // DATABASE ]<span class="cursor-blink"></span></h1>
+        </a>
+      </div>
+      <div class="controls-section">
+        <!-- Theme Selectors -->
+        <div class="theme-selector" title="Switch Theme Accent">
+          <button class="theme-btn abyssal" data-theme="abyssal"></button>
+          <button class="theme-btn blue" data-theme="blue"></button>
+          <button class="theme-btn purple" data-theme="purple"></button>
+          <button class="theme-btn green" data-theme="green"></button>
+        </div>
+        
+        <!-- Live System Clock -->
+        <div class="system-status">
+          <span class="status-dot"></span>
+          <span id="system-time">00:00:00 UTC</span>
+        </div>
+        
+        <!-- Audio Synth Toggle -->
+        <button class="audio-toggle" id="audio-toggle-btn">
+          <span id="audio-status-icon">🔊</span>
+          <span id="audio-status-text">AUDIO ON</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Swappable Page View Container -->
+    <main id="app-content">
+      <!-- Views are dynamically loaded here by the Router in app.js -->
+    </main>
+
+    <!-- Bottom Tech Footer -->
+    <footer>
+      <div>SYS_ACCESS: OPERATOR_LEVEL_04</div>
+      <div>ENCRYPTION: SHIELD_PROT_V9.72</div>
+      <div>CORE_KEY: 89F2A478-C0B0-4656-948F-16030565854E</div>
+    </footer>
+  </div>
+
+  <!-- Application Logic Scripts -->
+  <script src="terminal.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
