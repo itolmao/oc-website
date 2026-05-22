@@ -398,64 +398,149 @@ const PhotonSimulation = (() => {
 function runBootLoader() {
   const container = document.getElementById('boot-lines-container');
   const actionDiv = document.getElementById('boot-action');
-  const confirmBtn = document.getElementById('boot-confirm-btn');
+
+  // Style the container for centered text display
+  container.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2rem; text-align: center; flex: 1;';
 
   const bootLogs = [
-    { text: "       Subject: Seitou Mizuki", delay: 100, class: "" },
-    { text: "       Content: Confidential", delay: 400, class: "" },
-    { text: "                  ", delay: 700, class: "" },
-    { text: "       Continue Accessing?", delay: 1000, class: "" },
-    /*{ text: "SCANNING SECURED DIRECTORY DATABASE...", delay: 1300, class: "" },
-    { text: "  -> BASIC_INFO       ... DETECTED [CODE_01]", delay: 1500, class: "done" },
-    { text: "  -> COGNITIVE_LOGS   ... DETECTED [CODE_02]", delay: 1700, class: "done" },
-    { text: "  -> LINEAGE_FLOW     ... DETECTED [CODE_03]", delay: 1900, class: "done" },
-    { text: "  -> DURATION_TIMELINE... DETECTED [CODE_04]", delay: 2100, class: "done" },
-    { text: "  -> FILES_PORTFOLIO  ... DETECTED [CODE_05]", delay: 2300, class: "done" },
-    { text: "AUTHENTICATION ENCRYPTION GATEWAYS COMPLETED.", delay: 2600, class: "done" },
-    { text: "ACCESS GRANTED. HUDS ONLINE.", delay: 2900, class: "success" }*/
+    { text: "Subject: Seitou Mizuki", class: "" },
+    { text: "Content: Confidential", class: "" },
+    { text: "Continue Accessing?", class: "" },
   ];
 
-  // Play sweeping boot oscillator tone
-  setTimeout(() => {
-    playSynthSound('boot');
-  }, 100);
+  // --- YouTube audio cue ---
+  // We embed a hidden iframe to play the YouTube audio
+  let ytAudioStarted = false;
+  function tryPlayYouTubeAudio() {
+    if (ytAudioStarted) return;
+    ytAudioStarted = true;
+    const ytFrame = document.createElement('iframe');
+    ytFrame.id = 'yt-boot-audio';
+    ytFrame.src = 'https://www.youtube.com/embed/URVHRhBSjj8?autoplay=1&start=0&controls=0&loop=1&playlist=URVHRhBSjj8';
+    ytFrame.allow = 'autoplay';
+    ytFrame.style.cssText = 'position: fixed; width: 0; height: 0; top: -9999px; left: -9999px; opacity: 0; pointer-events: none;';
+    document.body.appendChild(ytFrame);
+  }
 
-  bootLogs.forEach((log) => {
-    setTimeout(() => {
+  // Typewriter audio using Web Audio API
+  function playTypewriterTick() {
+    if (!state.audioEnabled) return;
+    initAudio();
+    if (!state.audioContext) return;
+    const ctx = state.audioContext;
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    const now = ctx.currentTime;
+    // Mechanical typewriter click: short burst of noise-like sound
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(Math.random() > 0.5 ? 320 : 280, now);
+    osc.frequency.exponentialRampToValueAtTime(180, now + 0.025);
+    gainNode.gain.setValueAtTime(0.04, now);
+    gainNode.gain.linearRampToValueAtTime(0.001, now + 0.035);
+    osc.start(now);
+    osc.stop(now + 0.04);
+  }
+
+  // Type a single line char by char, returns a promise that resolves when done
+  function typeLineInto(el, text, charDelay = 55) {
+    return new Promise(resolve => {
+      let i = 0;
+      // blinking cursor element
+      const cursor = document.createElement('span');
+      cursor.textContent = '|';
+      cursor.style.cssText = 'animation: blink 0.7s infinite steps(1); color: var(--color-primary); margin-left: 1px;';
+      el.appendChild(cursor);
+
+      function typeNext() {
+        if (i < text.length) {
+          // Insert char before cursor
+          const charNode = document.createTextNode(text[i]);
+          el.insertBefore(charNode, cursor);
+          i++;
+          playTypewriterTick();
+          // Slight randomness in delay for organic feel
+          const jitter = charDelay + (Math.random() - 0.5) * 20;
+          setTimeout(typeNext, jitter);
+        } else {
+          // Remove cursor after line is done
+          cursor.remove();
+          resolve();
+        }
+      }
+      typeNext();
+    });
+  }
+
+  async function runTypingSequence() {
+    // Try to trigger YT audio on first user interaction or just attempt it
+    tryPlayYouTubeAudio();
+
+    for (let i = 0; i < bootLogs.length; i++) {
+      const log = bootLogs[i];
       const p = document.createElement('div');
       p.className = `boot-line ${log.class}`;
-      p.textContent = log.text;
+      // Larger font for boot lines
+      p.style.cssText = 'font-size: 1.25rem; letter-spacing: 0.08rem; text-align: center; min-height: 1.6em;';
       container.appendChild(p);
-      playSynthSound('beep-fast');
-      container.parentElement.scrollTop = container.parentElement.scrollHeight;
-    }, log.delay);
-  });
 
-  // Reveal Action Button
-  setTimeout(() => {
-    actionDiv.style.display = 'block';
-    confirmBtn.focus();
-  }, 3300);
+      await typeLineInto(p, log.text, 60);
 
-  confirmBtn.addEventListener('click', () => {
-    playSynthSound('success');
-    const loader = document.getElementById('boot-loader');
-    loader.classList.add('fade-out');
-    state.isBooted = true;
-
-    // Start background drone hum
-    if (state.audioEnabled) {
-      startAmbientHum();
+      // Pause between lines
+      await new Promise(r => setTimeout(r, 320));
     }
 
+    // Show Yes / No buttons
     setTimeout(() => {
-      loader.remove();
-      // Initialize routing
-      Router.init();
-      // Initialize theme switcher
-      initThemeSwitcher();
-    }, 600);
-  });
+      actionDiv.style.display = 'flex';
+      actionDiv.style.gap = '1.5rem';
+      actionDiv.style.justifyContent = 'center';
+    }, 200);
+  }
+
+  runTypingSequence();
+
+  // Build Yes/No buttons (replacing single confirm button)
+  actionDiv.innerHTML = `
+    <button class="cyber-btn" id="boot-yes-btn" style="min-width: 120px;">YES</button>
+    <button class="cyber-btn" id="boot-no-btn" style="min-width: 120px; border-color: rgba(239,68,68,0.4); color: #ef4444;">NO</button>
+  `;
+
+  setTimeout(() => {
+    const yesBtn = document.getElementById('boot-yes-btn');
+    const noBtn = document.getElementById('boot-no-btn');
+
+    if (yesBtn) {
+      yesBtn.addEventListener('click', () => {
+        playSynthSound('success');
+        // Stop YouTube audio iframe
+        const ytFrame = document.getElementById('yt-boot-audio');
+        if (ytFrame) ytFrame.remove();
+
+        const loader = document.getElementById('boot-loader');
+        loader.classList.add('fade-out');
+        state.isBooted = true;
+
+        if (state.audioEnabled) {
+          startAmbientHum();
+        }
+
+        setTimeout(() => {
+          loader.remove();
+          Router.init();
+          initThemeSwitcher();
+        }, 600);
+      });
+    }
+
+    if (noBtn) {
+      noBtn.addEventListener('click', () => {
+        playSynthSound('error');
+        window.open('https://www.youtube.com', '_blank');
+      });
+    }
+  }, 100);
 }
 
 
@@ -665,7 +750,7 @@ function renderHomeView() {
   return `
     <div class="page-container">
       <!-- Creator Intro Block -->
-      <div class="creator-intro cyber-panel" style="margin-bottom: 2rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+      <div class="creator-intro cyber-panel" style="margin-bottom: 2rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: var(--glow-primary), 0 0 40px rgba(255,255,255,0.06), 0 0 80px rgba(255,255,255,0.03); background: rgba(255,255,255,0.04); border-color: var(--color-border-hover);">
         <h2 class="cyber-title" style="margin: 0;">CREATOR'S NOTE</h2>
         <p style="margin: 1.5; font-family: var(--font-sans); font-size: 0.95rem; color: var(--color-text-muted);">
           I, the author, crafted Seitou Mizuki as an amalgam of cybernetic elegance and rebellious spirit. Inspired by classic "Z3RO" secure nodes, this directory reflects her origins, motivations, and the digital universe she inhabits.
