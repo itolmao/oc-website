@@ -770,7 +770,8 @@ footer {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
   gap: 0.5rem;
   box-shadow: var(--glow-primary);
 }
@@ -1538,4 +1539,4 @@ footer {
 @keyframes bounceBar {
   from { height: 3px; }
   to { height: 18px; }
-} 
+}
