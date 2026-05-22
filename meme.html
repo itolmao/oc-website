@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>loser</title>
+
+  <style>
+    body{
+      background:black;
+      color:white;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      margin:0;
+      font-family:Arial;
+      text-align:center;
+    }
+
+    #playText{
+      cursor:pointer;
+      font-size:42px;
+      line-height:1.5;
+      user-select:none;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1 id="playText">
+  YEA OKAY LOSER <br>
+  "No" 🤓🤓🤓 <br>
+  "oooh im so different" 🤓🤓🤓
+</h1>
+
+<div id="player"></div>
+
+<script>
+  // Load YouTube API
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  let player;
+  let ready = false;
+  let isPlaying = false;
+
+  function onYouTubeIframeAPIReady() {
+
+    player = new YT.Player('player', {
+      height: '0',
+      width: '0',
+
+      videoId: 'YN1SGS7N02U',
+
+      playerVars: {
+        autoplay: 0,
+        loop: 1,
+        playlist: 'YN1SGS7N02U'
+      },
+
+      events: {
+        onReady: function () {
+          ready = true;
+        }
+      }
+    });
+  }
+
+  document.getElementById("playText")
+    .addEventListener("click", function () {
+
+      if (!ready) return;
+
+      if (!isPlaying) {
+        player.playVideo();
+        isPlaying = true;
+      } else {
+        player.pauseVideo();
+        isPlaying = false;
+      }
+
+    });
+</script>
+
+</body>
+</html>
