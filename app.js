@@ -355,7 +355,7 @@ const PhotonSimulation = (() => {
 
   function triggerGlitch() {
     glitchActive = true;
-    glitchTimer = 180; // 3 seconds at 60fps
+    glitchTimer = 120; // 3 seconds at 60fps
     particles.forEach(p => {
       p.vx = (Math.random() - 0.5) * 8;
       p.vy = (Math.random() - 0.5) * 8;
