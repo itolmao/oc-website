@@ -14,10 +14,10 @@
       margin:0;
       font-family:Arial;
       text-align:center;
+      overflow:hidden;
     }
 
     #playText{
-      cursor:pointer;
       font-size:42px;
       line-height:1.5;
       user-select:none;
@@ -33,17 +33,16 @@
   "oooh im so different" 🤓🤓🤓
 </h1>
 
+<!-- hidden youtube player -->
 <div id="player"></div>
 
 <script>
-  // Load YouTube API
+  // load youtube api
   var tag = document.createElement('script');
   tag.src = "https://www.youtube.com/iframe_api";
   document.head.appendChild(tag);
 
   let player;
-  let ready = false;
-  let isPlaying = false;
 
   function onYouTubeIframeAPIReady() {
 
@@ -54,33 +53,22 @@
       videoId: 'YN1SGS7N02U',
 
       playerVars: {
-        autoplay: 0,
+        autoplay: 1,
         loop: 1,
         playlist: 'YN1SGS7N02U'
       },
 
       events: {
-        onReady: function () {
-          ready = true;
+        onReady: function(event) {
+
+          // instantly start playing
+          event.target.playVideo();
+
         }
       }
     });
+
   }
-
-  document.getElementById("playText")
-    .addEventListener("click", function () {
-
-      if (!ready) return;
-
-      if (!isPlaying) {
-        player.playVideo();
-        isPlaying = true;
-      } else {
-        player.pauseVideo();
-        isPlaying = false;
-      }
-
-    });
 </script>
 
 </body>
