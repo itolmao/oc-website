@@ -102,52 +102,6 @@ body.theme-green {
 }
 
 
-
- 
-
-/* Duplicate theme definitions removed */
-body.theme-purple {
-  --bg-primary: #1a001f;
-  --bg-secondary: #34003a;
-  --bg-tertiary: rgba(30, 0, 60, 0.7);
-
-  --color-primary: #d2b9ff;
-  --color-primary-rgb: 210, 185, 255;
-  --color-secondary: #9d4aff;
-  --color-secondary-rgb: 157, 74, 255;
-  --color-accent: #bf8fff;
-  --color-accent-rgb: 191, 143, 255;
-
-  --color-border: rgba(210, 185, 255, 0.2);
-  --color-border-hover: rgba(210, 185, 255, 0.5);
-  --color-border-glow: rgba(210, 185, 255, 0.8);
-
-  --glow-primary: 0 0 10px rgba(210, 185, 255, 0.22), 0 0 20px rgba(210, 185, 255, 0.08);
-  --glow-primary-hover: 0 0 15px rgba(210, 185, 255, 0.45), 0 0 30px rgba(210, 185, 255, 0.15);
-}
-
-/* ----- Additional Theme: Green ----- */
-body.theme-green {
-  --bg-primary: #001603;
-  --bg-secondary: #00380a;
-  --bg-tertiary: rgba(0, 56, 30, 0.7);
-
-  --color-primary: #d2ebd2;
-  --color-primary-rgb: 210, 235, 210;
-  --color-secondary: #6ab46a;
-  --color-secondary-rgb: 106, 180, 106;
-  --color-accent: #94bf94;
-  --color-accent-rgb: 148, 191, 148;
-
-  --color-border: rgba(210, 235, 210, 0.2);
-  --color-border-hover: rgba(210, 235, 210, 0.5);
-  --color-border-glow: rgba(210, 235, 210, 0.8);
-
-  --glow-primary: 0 0 10px rgba(210, 235, 210, 0.22), 0 0 20px rgba(210, 235, 210, 0.08);
-  --glow-primary-hover: 0 0 15px rgba(210, 235, 210, 0.45), 0 0 30px rgba(210, 235, 210, 0.15);
-}
-
-
 body.theme-photon {
   --bg-primary: #120303;
   --bg-secondary: #1d0a0a;
@@ -740,7 +694,7 @@ footer {
   gap: 0.25rem;
 }
 
-/* Boot loader full-screen sequence */
+/* Boot loader full-screen sequence — opacity:1 by default, never transparent on load */
 #boot-loader {
   position: fixed;
   top: 0;
@@ -749,6 +703,7 @@ footer {
   height: 100vh;
   background: #010409;
   z-index: 10000;
+  opacity: 1;
   display: flex;
   justify-content: center;
   align-items: center;
