@@ -537,7 +537,7 @@ function runBootLoader() {
     if (noBtn) {
       noBtn.addEventListener('click', () => {
         playSynthSound('error');
-        window.open('https://www.youtube.com', '_blank');
+        window.location.href = "meme.html";
       });
     }
   }, 100);
