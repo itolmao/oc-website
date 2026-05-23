@@ -1,0 +1,1 @@
+This website is an official database that I developed for my friend's original character (OC) Seitou Mizuki, who is based on the My Hero Academia anime franchise. The character is entirely hypothetical, and does not officially exist. All the content within the website are merely creative renditions of an imaginary character and its surrounding information.
